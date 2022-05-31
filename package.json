@@ -4,6 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "install-server": "npm install --production server",
+    "install-client": "npm install --production client",
+    "install": "npm run install-server && npm run install-client",
+    "client": "npm start --prefix client",
+    "server": " npm run watch --prefix server",
+    "watch": "npm run server & npm run client",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
