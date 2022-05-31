@@ -1,13 +1,18 @@
 const http = require("http");
 
-const PORT = process.env.PORT || 8000;
+const PORT = 8000;
 
 const app = require("./app");
 
 const server = http.createServer(app);
 
-server.listen(PORT, () => {
-  console.log("listen");
-});
+const { loadPlanets } = require("./modales/planets.modal");
 
-console.log(PORT);
+const startServer = async () => {
+  await loadPlanets();
+};
+startServer();
+
+server.listen(PORT, () => {
+  console.log(`Listening to the ${PORT}`);
+});
