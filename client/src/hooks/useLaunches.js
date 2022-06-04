@@ -34,7 +34,6 @@ function useLaunches(onSuccessSound, onAbortSound, onFailureSound) {
 
       //DONE: Add a new launch to the list
       const success = response.status || true;
-      console.log({ success });
       if (success) {
         getLaunches();
         setTimeout(() => {
@@ -52,9 +51,9 @@ function useLaunches(onSuccessSound, onAbortSound, onFailureSound) {
   const abortLaunch = useCallback(
     async (id) => {
       const response = await httpAbortLaunch(id);
-
-      // TODO: Set success based on response.
-      const success = false;
+      console.log({ response });
+      // DONE: Set success based on response.
+      const success = response.status || true;
       if (success) {
         getLaunches();
         onAbortSound();

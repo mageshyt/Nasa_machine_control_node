@@ -38,11 +38,15 @@ async function httpAbortLaunch(id) {
   // DONE: Once API is ready.
   try {
     const response = await fetch(`${Api_url}/launches/${id}`, {
-      method: "DELETE",
+      method: "delete",
     });
     const data = await response.json();
     return data;
-  } catch (error) {}
+  } catch (error) {
+    return {
+      status: false,
+    };
+  }
   // Delete launch with given ID.
 }
 

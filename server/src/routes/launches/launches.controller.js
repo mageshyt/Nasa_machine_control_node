@@ -10,7 +10,6 @@ function httpSetLaunches(req, res) {
     return res.status(400).send("<h2> There is a Problem 😞</h2>").json();
   }
   const launch = req.body;
-  console.log("Launches ❤️‍🔥", launch);
   //! If  anything is missed
   if (
     !launch.launch_date_utc ||
@@ -34,7 +33,21 @@ function httpSetLaunches(req, res) {
   return res.status(201).json(launch);
 }
 
+const http_abort_the_launch = (req, res) => {
+  const id = parseInt(req.params.id);
+  console.log({ id });
+  if (!launches.Is_launch_exists(id)) {
+    return res.status(404).json({
+      error: "Launch not found",
+    });
+  }
+  const aborted = launches.abortLaunch(id);
+  console.log("Abort Launch 🔥", id, aborted);
+  return res.status(200).json(aborted);
+};
+
 module.exports = {
   httpGetAllLaunches,
   httpSetLaunches,
+  http_abort_the_launch,
 };

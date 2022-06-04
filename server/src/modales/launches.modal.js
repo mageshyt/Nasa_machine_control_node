@@ -32,8 +32,22 @@ const AddNewLaunch = (launch) => {
   );
 };
 
+const abortLaunch = (id) => {
+  console.log("Abort Launch 🔥", id, launches);
+  //! remove the launch
+  const aborted = launches.get(id);
+  aborted.upcoming = false;
+  aborted.success = false;
+  return aborted;
+};
+
+const Is_launch_exists = (id) => {
+  return launches.has(id);
+};
+
 module.exports = {
   getAllLaunches,
   AddNewLaunch,
-
+  abortLaunch,
+  Is_launch_exists,
 };
