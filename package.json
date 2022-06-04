@@ -7,7 +7,7 @@
     "install-server": "npm install --production server",
     "install-client": "npm install --production client",
     "install": "npm run install-server && npm run install-client",
-    
+    "deploy": "npm run --prefix client && npm start --prefix server",
     "client": "npm start --prefix client",
     "server": " npm run watch --prefix server",
     "watch": "npm run server & npm run client",
@@ -23,5 +23,9 @@
   "bugs": {
     "url": "https://github.com/mageshyt/Nasa_machine_control_node/issues"
   },
-  "homepage": "https://github.com/mageshyt/Nasa_machine_control_node#readme"
+  "homepage": "https://github.com/mageshyt/Nasa_machine_control_node#readme",
+  "dependencies": {
+    "client": "^0.0.1",
+    "server": "^0.0.3"
+  }
 }
