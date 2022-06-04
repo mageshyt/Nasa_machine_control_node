@@ -1,9 +1,9 @@
-const { planets } = require("../../modales/planets.modal");
+const { getAllPlanets } = require("../../modales/planets.modal");
 
-function getAllPlanets(req, res) {
+function httpGetAllPlanets(req, res) {
   console.log("getAllPlanets 😀");
 
-  return res.status(200).json(planets);
+  return res.status(200).json(getAllPlanets());
 }
 
-module.exports = getAllPlanets;
+module.exports = { httpGetAllPlanets };

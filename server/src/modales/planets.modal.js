@@ -37,9 +37,12 @@ const loadPlanets = () => {
   });
 };
 
-console.log(habitable_planets);
+
+const getAllPlanets = () => {
+  return habitable_planets
+}
 
 module.exports = {
-  planets: habitable_planets,
+  getAllPlanets,
   loadPlanets,
 };

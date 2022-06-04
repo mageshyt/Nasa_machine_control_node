@@ -19,10 +19,10 @@ app.use(
 );
 
 //! get planets Routes
-app.use(planetsRouter);
+app.use("/planets", planetsRouter);
 
 //! launches Route
-app.use(launchRoutes);
+app.use("/launches", launchRoutes);
 
 app.use(express.json());
 
