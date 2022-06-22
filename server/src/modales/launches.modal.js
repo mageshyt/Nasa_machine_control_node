@@ -33,7 +33,7 @@ const AddNewLaunch = (launch) => {
 };
 
 const abortLaunch = (id) => {
-  console.log("Abort Launch 🔥", id, launches);
+  console.log("Abort Launch 🔥", id);
   //! remove the launch
   const aborted = launches.get(id);
   aborted.upcoming = false;

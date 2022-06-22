@@ -35,14 +35,12 @@ function httpSetLaunches(req, res) {
 
 const http_abort_the_launch = (req, res) => {
   const id = parseInt(req.params.id);
-  console.log({ id });
   if (!launches.Is_launch_exists(id)) {
     return res.status(404).json({
       error: "Launch not found",
     });
   }
   const aborted = launches.abortLaunch(id);
-  console.log("Abort Launch 🔥", id, aborted);
   return res.status(200).json(aborted);
 };
 
