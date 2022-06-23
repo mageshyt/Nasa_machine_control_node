@@ -1,6 +1,8 @@
 const { parse } = require("csv-parse");
 const fs = require("fs"); //! file system
 const path = require("path");
+const mongoose = require("mongoose");
+const { planets } = require("./planets.mongo");
 const isHabitable = (planet) => {
   return (
     planet["koi_disposition"] === "CONFIRMED" &&
@@ -12,6 +14,24 @@ const isHabitable = (planet) => {
 
 const habitable_planets = [];
 
+const update_planet = async (planet) => {
+  const { kepler_name } = planet;
+  try {
+    await planets.updateOne(
+      {
+        kepler_name,
+      },
+      {
+        kepler_name,
+      },
+      {
+        upsert: true,
+      }
+    );
+  } catch (err) {
+    console.log("could not update ", err);
+  }
+};
 const loadPlanets = () => {
   return new Promise((resolve, reject) => {
     fs.createReadStream(path.join(__dirname, "..", "data", "kepler_data.csv"))
@@ -22,25 +42,33 @@ const loadPlanets = () => {
           columns: true,
         })
       ) //! pipe the data to the parse function
-      .on("data", (data) => {
+      .on("data", async (data) => {
         if (isHabitable(data)) {
           habitable_planets.push(data);
+          // TODO :  insert + update = upsert
+          update_planet(data);
         }
       })
       .on("error", (err) => {
         reject(err);
       })
-      .on("end", () => {
-        console.log(`${habitable_planets.length} habitable planets found!`);
+      .on("end", async () => {
+        console.log(`${await getAllPlanets()} habitable planets found!`);
         resolve();
       });
   });
 };
 
-
-const getAllPlanets = () => {
-  return habitable_planets
-}
+const getAllPlanets = async () => {
+  return await planets.find(
+    {},
+    {
+      __v: 0,
+      _id: 0,
+    }
+  );
+  // return habitable_planets;
+};
 
 module.exports = {
   getAllPlanets,

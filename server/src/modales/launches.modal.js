@@ -1,5 +1,6 @@
-const launches = new Map();
+const { launch_modal } = require("./launches.mongo");
 
+const launches = new Map();
 let latest_flight_number = 1;
 
 const launch = {
@@ -30,6 +31,7 @@ const AddNewLaunch = (launch) => {
       success: true,
     })
   );
+  console.log("Add New Launch 🚀", launches);
 };
 
 const abortLaunch = (id) => {
@@ -44,6 +46,12 @@ const abortLaunch = (id) => {
 const Is_launch_exists = (id) => {
   return launches.has(id);
 };
+
+
+const Insert_Launch = async (launch) => {
+  // const new_launch = 
+}
+
 
 module.exports = {
   getAllLaunches,
