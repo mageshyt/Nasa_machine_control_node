@@ -27,12 +27,6 @@ const launches_schema = new Schema({
     required: true,
   },
 
-  target: {
-    // ref: "Planet",
-    type: String,
-    required: true,
-  },
-
   upcoming: {
     type: Boolean,
     required: true,
@@ -50,13 +44,4 @@ const launches_schema = new Schema({
 
 const mongoose_launch_modal = model("Launch", launches_schema);
 
-module.exports = {
-  launch_modal: mongoose_launch_modal,
-};
-
-const test_schema = new Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-});
+module.exports = mongoose_launch_modal;

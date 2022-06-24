@@ -2,6 +2,8 @@ const express = require("express");
 
 const path = require("path");
 
+const launches = require("./modales/launches.mongo");
+
 const cors = require("cors");
 
 const app = express();
@@ -28,5 +30,19 @@ app.use(express.static(path.join(__dirname, "..", "public")));
 app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "public", "/index.html"));
 });
+
+const launch = {
+  flightNumber: 10,
+  mission: "Kepler Exoplanet Archive",
+  rocket: "FExplorer IS1",
+  launch_date_utc: new Date("December 27,2030"),
+  destination: "kepler-442 b",
+  customers: ["NASA", "SpaceX", "Google", "ZTM"],
+  upcoming: true,
+  launch_success: true,
+};
+
+
+
 
 module.exports = app;

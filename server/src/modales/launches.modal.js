@@ -1,36 +1,46 @@
-const { launch_modal } = require("./launches.mongo");
+const launchDataBase = require("./launches.mongo");
 
 const launches = new Map();
-let latest_flight_number = 1;
+let latest_flight_number = 100;
 
-const launch = {
-  flightNumber: latest_flight_number,
-  mission: "Kepler Exoplanet Archive",
-  rocket: "FExplorer IS1",
-  launch_date_utc: new Date("December 27,2030"),
-  destination: "kepler-442 b",
-  customers: ["NASA", "SpaceX", "Google", "ZTM"],
-  upcoming: true,
-  launch_success: true,
+const set_launches = async (launch) => {
+  try {
+    await launchDataBase
+      .updateOne(
+        {
+          flightNumber: launch.flightNumber,
+        },
+        launch,
+        { upsert: true }
+      )
+      .then((res) => {
+        console.log("Inserted 🚀");
+      });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
-launches.set(launch.flightNumber, launch);
-
-const getAllLaunches = () => {
-  return Array.from(launches.values());
+const getAllLaunches = async () => {
+  return await launchDataBase.find(
+    {},
+    {
+      _id: 0,
+      __v: 0,
+    }
+  );
 };
 
 const AddNewLaunch = (launch) => {
   latest_flight_number++;
-  launches.set(
-    latest_flight_number,
-    Object.assign(launch, {
-      flightNumber: latest_flight_number,
-      customers: ["LARA", "NASA"],
-      upcoming: true,
-      success: true,
-    })
-  );
+  const newLaunch = Object.assign(launch, {
+    flightNumber: latest_flight_number,
+    customers: ["LARA", "NASA"],
+    upcoming: true,
+    success: true,
+  });
+
+  set_launches(newLaunch);
   console.log("Add New Launch 🚀", launches);
 };
 
@@ -46,12 +56,6 @@ const abortLaunch = (id) => {
 const Is_launch_exists = (id) => {
   return launches.has(id);
 };
-
-
-const Insert_Launch = async (launch) => {
-  // const new_launch = 
-}
-
 
 module.exports = {
   getAllLaunches,

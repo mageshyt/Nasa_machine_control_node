@@ -1,7 +1,6 @@
 const { parse } = require("csv-parse");
 const fs = require("fs"); //! file system
 const path = require("path");
-const mongoose = require("mongoose");
 const { planets } = require("./planets.mongo");
 const isHabitable = (planet) => {
   return (

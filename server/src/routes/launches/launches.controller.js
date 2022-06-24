@@ -1,8 +1,8 @@
 const launches = require("../../modales/launches.modal");
 
-function httpGetAllLaunches(req, res) {
+async function httpGetAllLaunches(req, res) {
   console.log("Launches 😀");
-  return res.status(200).json(launches.getAllLaunches());
+  return res.status(200).json(await launches.getAllLaunches());
 }
 
 function httpSetLaunches(req, res) {
