@@ -52,7 +52,9 @@ const loadPlanets = () => {
         reject(err);
       })
       .on("end", async () => {
-        console.log(`${await getAllPlanets()} habitable planets found!`);
+        console.log(
+          `${await (await getAllPlanets()).length} habitable planets found!`
+        );
         resolve();
       });
   });

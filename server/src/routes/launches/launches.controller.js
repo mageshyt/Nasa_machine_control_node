@@ -5,7 +5,8 @@ async function httpGetAllLaunches(req, res) {
   return res.status(200).json(await launches.getAllLaunches());
 }
 
-function httpSetLaunches(req, res) {
+//! set launches
+async function httpSetLaunches(req, res) {
   if (!req.body) {
     return res.status(400).send("<h2> There is a Problem 😞</h2>").json();
   }
@@ -29,19 +30,32 @@ function httpSetLaunches(req, res) {
       error: "Please enter a valid date",
     });
   }
-  launches.AddNewLaunch(launch);
-  return res.status(201).json(launch);
+  //! shedule the launch
+  const result = await launches.sheduleNewLaunch(launch);
+  console.log("result", result);
+  return res.status(201).json(result);
 }
-
-const http_abort_the_launch = (req, res) => {
+//! Abort the launch
+const http_abort_the_launch = async (req, res) => {
   const id = parseInt(req.params.id);
+
   if (!launches.Is_launch_exists(id)) {
     return res.status(404).json({
       error: "Launch not found",
     });
   }
-  const aborted = launches.abortLaunch(id);
-  return res.status(200).json(aborted);
+  const aborted = await launches.abortLaunch(id);
+
+  if (!aborted) {
+    return res.status(400).json({
+      error: "Launch not aborted",
+    });
+  }
+
+  return res.status(200).json({
+    success: "Launch aborted",
+    ok: true,
+  });
 };
 
 module.exports = {
