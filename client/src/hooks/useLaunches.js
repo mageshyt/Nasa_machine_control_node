@@ -7,9 +7,9 @@ function useLaunches(onSuccessSound, onAbortSound, onFailureSound) {
   const [isPendingLaunch, setPendingLaunch] = useState(false);
 
   const getLaunches = useCallback(async () => {
-    const fetchedLaunches = await httpGetLaunches();
-    console.log(fetchedLaunches);
-    saveLaunches(fetchedLaunches);
+    const fetchedLaunches = await httpGetLaunches(); //! fetching the launches
+    // console.log(fetchedLaunches);
+    saveLaunches(fetchedLaunches); //! saving the launches
   }, []);
 
   useEffect(() => {

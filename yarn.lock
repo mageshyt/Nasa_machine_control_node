@@ -363,7 +363,7 @@
   "version" "2.0.1"
 
 "server@^0.0.3":
-  "integrity" "sha1-JBFd6c0+4F3Md8NJCQY4UI74zjY="
+  "integrity" "sha512-o8Zn53r+oS4ljJXBDtNJw0WQv3HFvnzGuexs4PpvvFBmZfytOxs84ddyZzZ+ou+6FIYc5x5bpHeOld//HQDHXA=="
   "resolved" "https://registry.npmjs.org/server/-/server-0.0.3.tgz"
   "version" "0.0.3"
   dependencies:
