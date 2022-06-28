@@ -1,6 +1,7 @@
+// const { populateData } = require("./launches.modal.utlis");
+const { default: axios } = require("axios");
 const launchDataBase = require("./launches.mongo");
 const { planets } = require("./planets.mongo");
-const axios = require("axios");
 
 const default_flight_number = 100;
 //! to check the planet is exist or not
@@ -10,11 +11,8 @@ const Is_launch_exists = async (name) => {
 };
 
 const set_launches = async (launch) => {
-  const { destination } = launch;
+  // const { destination } = launch;
   // console.log("Destination 🔥", destination);
-  if (!(await Is_launch_exists(destination))) {
-    throw new Error("No Planet Found");
-  }
 
   try {
     await launchDataBase
@@ -34,6 +32,7 @@ const set_launches = async (launch) => {
   return launch;
 };
 
+//! to get the latest flight number
 const getLatestFlight = async () => {
   const res = await launchDataBase
     .findOne(
@@ -52,7 +51,9 @@ const getLatestFlight = async () => {
 
 const sheduleNewLaunch = async (launch) => {
   const latest_flight_number = (await getLatestFlight()) + 1;
-
+  if (!(await Is_launch_exists(launch.destination))) {
+    throw new Error("No Planet Found");
+  }
   const newLaunch = Object.assign(launch, {
     customers: ["LARA", "NASA", "ZTM"],
     upcoming: true,
@@ -79,32 +80,77 @@ const abortLaunch = async (id) => {
   return aborted?.modifiedCount == 1;
 };
 //! to get all the launches
-const getAllLaunches = async () => {
-  return await launchDataBase.find(
-    {},
-    {
-      _id: 0,
-      __v: 0,
-    }
-  );
+const getAllLaunches = async (limit, skip) => {
+  return await launchDataBase
+    .find(
+      {},
+      {
+        _id: 0,
+        __v: 0,
+      }
+    )
+    .skip(skip)
+    .limit(limit);
+};
+
+const findLaunch = async (filter) => {
+  return await launchDataBase.findOne(filter);
 };
 
 const SPACE_X_API = "https://api.spacexdata.com/v4/launches/query";
 
-const loadLaunchDate = async () => {
+const populateData = async (data) => {
   console.log("Downloading Launch Data 🔥");
-  const res = await axios.post(SPACE_X_API, {
+  const response = await axios.post(SPACE_X_API, {
     query: {},
     options: {
+      pagination: false,
       populate: [
         {
           path: "rocket",
           select: { name: 1 },
         },
+        {
+          path: "payloads",
+          select: { customers: 1 },
+        },
       ],
     },
   });
-  console.log("res 🔥", res);
+  if (response.status !== 200) {
+    console.log("Problem in downloading data 🔥");
+    throw new Error("Problem in downloading data 🔥");
+  }
+  const launchDocs = response.data.docs;
+  for (const launchDoc of launchDocs) {
+    const { flight_number, name, rocket } = launchDoc;
+    const { date_local, payloads, success, upcoming } = launchDoc;
+
+    const launch = {
+      flightNumber: flight_number,
+      mission: name,
+      rocket: rocket.name,
+      launch_date_utc: new Date(date_local),
+      upcoming: upcoming,
+      launch_success: success,
+      customers: payloads.map((payload) => payload.customers).flat(),
+    };
+    console.log(` ${flight_number} Saving Launch Data 🔥`, name);
+    await set_launches(launch).then("launch saved");
+  }
+  return launchDocs;
+};
+const loadLaunchDate = async () => {
+  const result = await findLaunch({
+    flight_number: 1,
+    rocket: "Falcon 1",
+    mission: "FalconSat",
+  });
+  if (result) {
+    console.log("Launch Date Loaded 🔥");
+  } else {
+    await populateData();
+  }
 };
 
 module.exports = {
@@ -113,4 +159,5 @@ module.exports = {
   abortLaunch,
   Is_launch_exists,
   loadLaunchDate,
+  set_launches,
 };

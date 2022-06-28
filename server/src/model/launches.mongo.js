@@ -24,7 +24,7 @@ const launches_schema = new Schema({
 
   destination: {
     type: String,
-    required: true,
+    // required: true,
   },
 
   upcoming: {

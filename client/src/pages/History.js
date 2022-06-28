@@ -2,14 +2,18 @@ import { useMemo } from "react";
 import { Appear, Table, Paragraph } from "arwes";
 
 const History = (props) => {
+  const { launches } = props;
+
   const tableBody = useMemo(() => {
-    return props.launches
+    return launches
       ?.filter((launch) => !launch.upcoming)
       .map((launch) => {
         return (
           <tr key={String(launch.flightNumber)}>
             <td>
-              <span style={{ color: launch.success ? "greenyellow" : "red" }}>
+              <span
+                style={{ color: launch.launch_success ? "greenyellow" : "red" }}
+              >
                 █
               </span>
             </td>
@@ -21,7 +25,7 @@ const History = (props) => {
           </tr>
         );
       });
-  }, [props.launches]);
+  }, [launches]);
 
   return (
     <article id="history">

@@ -1,8 +1,11 @@
 const launches = require("../../model/launches.modal");
+const { getPagination } = require("../../servers/query");
 
 async function httpGetAllLaunches(req, res) {
+  const { skip, limit } = getPagination(req.query);
+
   console.log("Launches 😀");
-  return res.status(200).json(await launches.getAllLaunches());
+  return res.status(200).json(await launches.getAllLaunches(limit, skip));
 }
 
 //! set launches

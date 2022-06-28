@@ -3,12 +3,11 @@ const mongoose = require("mongoose");
 const { MongoClient, ServerApiVersion } = require("mongodb");
 
 //! mongo url
-const url = `mongodb+srv://magesh:7RGqIcc2LtRBEhXy@cluster0.8yryvm8.mongodb.net/nasa?retryWrites=true&w=majority`;
+const url = process.env.MONOG_URL;
 
 const mongoConnect = async () => {
   await mongoose.connect(url);
 };
-
 
 mongoose.connection.on("open", () => {
   console.log("connected to mongo");
