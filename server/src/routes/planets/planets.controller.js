@@ -1,4 +1,4 @@
-const { getAllPlanets } = require("../../modales/planets.modal");
+const { getAllPlanets } = require("../../model/planets.modal");
 
 async function httpGetAllPlanets(req, res) {
   console.log("getAllPlanets 😀 ");

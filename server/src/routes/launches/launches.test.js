@@ -1,20 +1,19 @@
 const request = require("supertest");
 
 const app = require("../../app");
-
-const { connect_to_mongo } = require("../../servers/mongo");
-beforeAll(async () => {
-  jest.setTimeout(6000);
-  return await connect_to_mongo();
-});
-// afterEach(async (close) => {
-//   await close_mongo();
-// });
-
+const { connect_to_mongo, close_mongo } = require("../../servers/mongo");
 describe("Launches Api", () => {
+  beforeAll(async () => {
+    await connect_to_mongo();
+  });
+
+  afterAll(async () => {
+    await close_mongo();
+  });
+
   describe("Test Get /launches", () => {
     test("should return all launches", async () => {
-      const response = await request(app).get("/launches");
+      const response = await request(app).get("/v1/launches");
       expect(response.status).toBe(200);
     });
   });
@@ -63,7 +62,7 @@ describe("Launches Api", () => {
     }),
       //! invalid date
       test("it should catch invalid date", async () => {
-        const response = await request(app).post("/launches").send({
+        const response = await request(app).post("/v1/launches").send({
           mission: "Going to Mars",
           rocket: "lara 43b",
           destination: "Mars",
@@ -78,12 +77,12 @@ describe("Launches Api", () => {
   //! for abort
   describe("Test Delete /launches/:id", () => {
     test("It should respond with status code 200", async () => {
-      const response = await request(app).delete("/launches/110");
+      const response = await request(app).delete("/v1/launches/116");
       expect(response.status).toBe(200);
     });
 
     test("It should respond with status code 404", async () => {
-      const response = await request(app).delete("/launches/100");
+      const response = await request(app).delete("/v1/launches/100");
       expect(response.status).toBe(400);
     });
   });

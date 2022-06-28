@@ -1,4 +1,4 @@
-const launches = require("../../modales/launches.modal");
+const launches = require("../../model/launches.modal");
 
 async function httpGetAllLaunches(req, res) {
   console.log("Launches 😀");
